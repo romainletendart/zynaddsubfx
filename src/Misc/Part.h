@@ -92,10 +92,18 @@ class Part
         void cleanup(bool final = false);
 
         //the part's kit
+<<<<<<< Updated upstream
         struct Kit {
             unsigned char      Penabled, Pmuted, Pminkey, Pmaxkey;
             char              *Pname;
             unsigned char      Padenabled, Psubenabled, Ppadenabled;
+=======
+        struct KitItem {
+            unsigned char     *Pname;
+            unsigned char      Pminkey, Pmaxkey;
+            bool               Penabled, Pmuted;
+            bool               Padenabled, Psubenabled, Ppadenabled;
+>>>>>>> Stashed changes
             unsigned char      Psendtoparteffect;
             ADnoteParameters  *adpars;
             SUBnoteParameters *subpars;
@@ -109,7 +117,7 @@ class Part
         void setkeylimit(unsigned char Pkeylimit);
         void setkititemstatus(unsigned kititem, bool Penabled_);
 
-        unsigned char Penabled; /**<if the part is enabled*/
+        bool          Penabled; /**<if the part is enabled*/
         unsigned char Pvolume; /**<part volume*/
         unsigned char Pminkey; /**<the minimum key that the part receives noteon messages*/
         unsigned char Pmaxkey; //the maximum key that the part receives noteon messages
@@ -120,12 +128,12 @@ class Part
         void setPpanning(char Ppanning);
         unsigned char Pvelsns; //velocity sensing (amplitude velocity scale)
         unsigned char Pveloffs; //velocity offset
-        unsigned char Pnoteon; //if the part receives NoteOn messages
-        unsigned char Pkitmode; //if the kitmode is enabled
-        unsigned char Pdrummode; //if all keys are mapped and the system is 12tET (used for drums)
+        bool          Pnoteon; //if the part receives NoteOn messages
+        bool          Pkitmode; //if the kitmode is enabled
+        bool          Pdrummode; //if all keys are mapped and the system is 12tET (used for drums)
 
-        unsigned char Ppolymode; //Part mode - 0=monophonic , 1=polyphonic
-        unsigned char Plegatomode; // 0=normal, 1=legato
+        bool          Ppolymode; //Part mode - 0=monophonic , 1=polyphonic
+        bool          Plegatomode; // 0=normal, 1=legato
         unsigned char Pkeylimit; //how many keys are alowed to be played same time (0=off), the older will be relased
 
         char *Pname; //name of the instrument
@@ -172,9 +180,7 @@ class Part
             int note; //if there is no note playing, the "note"=-1
             int itemsplaying;
             struct {
-                SynthNote *adnote,
-                   *subnote,
-                   *padnote;
+                SynthNote *adnote, *subnote, *padnote;
                 int sendtoparteffect;
             } kititem[NUM_KIT_ITEMS];
             int time;

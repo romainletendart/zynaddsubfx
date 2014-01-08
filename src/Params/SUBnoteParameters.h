@@ -104,9 +104,8 @@ class SUBnoteParameters:public Presets
 
         //how the harmonics start("0"=0,"1"=random,"2"=1)
         unsigned char Pstart;
-
+       
         static rtosc::Ports &ports;
-    private:
 };
 
 #endif

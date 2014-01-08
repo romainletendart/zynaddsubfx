@@ -80,8 +80,8 @@ class PADnote:public SynthNote
             ******************************************/
             float Detune;  //cents
 
-            Envelope *FreqEnvelope;
-            LFO      *FreqLfo;
+            Envelope FreqEnvelope;
+            LFO      FreqLfo;
 
             /********************************************
              *     AMPLITUDE GLOBAL PARAMETERS          *
@@ -90,8 +90,8 @@ class PADnote:public SynthNote
 
             float Panning;  // [ 0 .. 1 ]
 
-            Envelope *AmpEnvelope;
-            LFO      *AmpLfo;
+            Envelope AmpEnvelope;
+            LFO      AmpLfo;
 
             struct {
                 int   Enabled;
@@ -101,7 +101,7 @@ class PADnote:public SynthNote
             /******************************************
             *        FILTER GLOBAL PARAMETERS        *
             ******************************************/
-            class Filter * GlobalFilterL, *GlobalFilterR;
+            class Filter *GlobalFilterL, *GlobalFilterR;
 
             float FilterCenterPitch;  //octaves
             float FilterQ;
