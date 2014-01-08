@@ -24,6 +24,19 @@
 #include "../globals.h"
 #include "../Params/FilterParams.h"
 
+struct SynthPars
+{
+    class Controller &ctl;
+    float freq;
+    float velocity;
+    int portamento;
+    int midinote;
+    bool besilent;
+};
+
+//TODO add controller
+//TODO add volume, panning, stereo, basefreq, ampenv, freqenv, filterenv, and
+//         global filter
 class SynthNote
 {
     public:

@@ -71,10 +71,10 @@ class EnvelopeParams:public Presets
 
 
         int Envmode; // 1 for ADSR parameters (linear amplitude)
-        // 2 for ADSR_dB parameters (dB amplitude)
-        // 3 for ASR parameters (frequency LFO)
-        // 4 for ADSR_filter parameters (filter parameters)
-        // 5 for ASR_bw parameters (bandwidth parameters)
+                     // 2 for ADSR_dB parameters (dB amplitude)
+                     // 3 for ASR parameters (frequency LFO)
+                     // 4 for ADSR_filter parameters (filter parameters)
+                     // 5 for ASR_bw parameters (bandwidth parameters)
 
         static rtosc::Ports &ports;
     private:

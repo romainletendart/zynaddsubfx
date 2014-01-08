@@ -245,11 +245,10 @@ void PADnote::computecurrentparameters()
 
     //compute the portamento, if it is used by this note
     float portamentofreqrap = 1.0f;
-    if(portamento != 0) { //this voice use portamento
+    if(portamento) { //this voice use portamento
         portamentofreqrap = ctl->portamento.freqrap;
         if(ctl->portamento.used == 0) //the portamento has finished
-            portamento = 0;  //this note is no longer "portamented"
-        ;
+            portamento = false;  //this note is no longer "portamented"
     }
 
     realfreq = basefreq * portamentofreqrap
@@ -426,7 +425,7 @@ int PADnote::finished() const
 
 void PADnote::relasekey()
 {
-    NoteGlobalPar.FreqEnvelope->relasekey();
-    NoteGlobalPar.FilterEnvelope->relasekey();
-    NoteGlobalPar.AmpEnvelope->relasekey();
+    NoteGlobalPar.FreqEnvelope.relasekey();
+    NoteGlobalPar.FilterEnvelope.relasekey();
+    NoteGlobalPar.AmpEnvelope.relasekey();
 }
