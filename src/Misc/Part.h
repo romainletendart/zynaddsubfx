@@ -92,18 +92,11 @@ class Part
         void cleanup(bool final = false);
 
         //the part's kit
-<<<<<<< Updated upstream
-        struct Kit {
-            unsigned char      Penabled, Pmuted, Pminkey, Pmaxkey;
-            char              *Pname;
-            unsigned char      Padenabled, Psubenabled, Ppadenabled;
-=======
         struct KitItem {
             unsigned char     *Pname;
             unsigned char      Pminkey, Pmaxkey;
             bool               Penabled, Pmuted;
             bool               Padenabled, Psubenabled, Ppadenabled;
->>>>>>> Stashed changes
             unsigned char      Psendtoparteffect;
             ADnoteParameters  *adpars;
             SUBnoteParameters *subpars;
@@ -168,6 +161,9 @@ class Part
         static rtosc::Ports &ports;
 
     private:
+        struct PartNotes;
+        struct SynthPars;
+        void initNote(PartNotes &p, const SynthPars &pars);
         void RunNote(unsigned k);
         void KillNotePos(int pos);
         void RelaseNotePos(int pos);
@@ -179,12 +175,18 @@ class Part
             NoteStatus status;
             int note; //if there is no note playing, the "note"=-1
             int itemsplaying;
-            struct {
-                SynthNote *adnote, *subnote, *padnote;
-                int sendtoparteffect;
-            } kititem[NUM_KIT_ITEMS];
+            char sendtoparteffect[NUM_KIT_ITEMS];
             int time;
+            int begin() const;
+            int end() const;
         };
+        //
+        //note allocation table
+        //status, note, begin(), end(), itemsplplaying, 
+        //char sendto[NUM_KIT_ITEMS]
+        //SynthNote *notes[POLYPHONY*NUM_KIT_ITEMS]
+        //
+        //
 
         int  lastpos, lastposb; // To keep track of previously used pos and posb.
         bool lastlegatomodevalid; // To keep track of previous legatomodevalid.
@@ -201,6 +203,7 @@ class Part
            For example 'monomem[note].velocity' would be the velocity value of the note 'note'.*/
 
         PartNotes partnote[POLIPHONY];
+        SynthNote *notes[POLIPHONY*NUM_KIT_ITEMS];
 
         float oldfreq;    //this is used for portamento
         Microtonal *microtonal;

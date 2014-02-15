@@ -27,19 +27,14 @@
 #include "../Params/Controller.h"
 #include "Envelope.h"
 #include "LFO.h"
-#include "../Params/Controller.h"
 
 /**The "pad" synthesizer*/
 class PADnote:public SynthNote
 {
     public:
-        PADnote(PADnoteParameters *parameters,
-                Controller *ctl_,
-                float freq,
-                float velocity,
-                int portamento_,
-                int midinote,
-                bool besilent);
+        PADnote(const PADnoteParameters *parameters, const SynthPars p)
+            :PADnote(*parameters,p){}
+        PADnote(const PADnoteParameters &parameters, const SynthPars p);
         ~PADnote();
 
         void legatonote(float freq, float velocity, int portamento_,
@@ -54,13 +49,13 @@ class PADnote:public SynthNote
         void fadein(float *smps);
         void computecurrentparameters();
         bool finished_;
-        PADnoteParameters *pars;
+        const PADnoteParameters &pars;
 
         int   poshi_l, poshi_r;
         float poslo;
 
         float basefreq;
-        bool  firsttime, released;
+        bool  firsttime;
 
         int nsample, portamento;
 
@@ -107,14 +102,13 @@ class PADnote:public SynthNote
             float FilterQ;
             float FilterFreqTracking;
 
-            Envelope *FilterEnvelope;
+            Envelope FilterEnvelope;
 
-            LFO *FilterLfo;
+            LFO FilterLfo;
         } NoteGlobalPar;
 
 
         float globaloldamplitude, globalnewamplitude, velocity, realfreq;
-        Controller *ctl;
 };
 
 

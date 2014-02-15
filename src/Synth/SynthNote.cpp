@@ -2,8 +2,8 @@
 #include "../globals.h"
 #include <cstring>
 
-SynthNote::SynthNote(float freq, float vel, int port, int note, bool quiet)
-    :legato(freq, vel, port, note, quiet)
+SynthNote::SynthNote(const SynthPars &p)
+    :ctl(p.ctl), legato(p.freq, p.velocity, p.portamento, p.midinote, p.besilent)
 {}
 
 SynthNote::Legato::Legato(float freq, float vel, int port,

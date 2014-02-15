@@ -140,6 +140,11 @@ float cinterpolate(const float *data, size_t len, float pos);
 ///trims a path in recursions
 const char *message_snip(const char *m);
 
+template<class T>
+static inline void nullify(T &t) {delete t; t = NULL; }
+template<class T>
+static inline void arrayNullify(T &t) {delete [] t; t = NULL; }
+
 ///floating point parameter - with lookup code
 #define PARAMF(type, var, name, scale, _min, _max, desc) \
 {#name"::f", ":parameter\0:documentation\0=" desc "\0", 0, \

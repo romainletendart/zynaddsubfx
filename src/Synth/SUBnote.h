@@ -33,8 +33,9 @@
 class SUBnote:public SynthNote
 {
     public:
-        SUBnote(SUBnoteParameters *parameters, Controller *ctl_, float freq,
-                float velocity, int portamento_, int midinote, bool besilent);
+        SUBnote(const SUBnoteParameters *parameters, const SynthPars p)
+            :SUBnote(*parameters, p) {}
+        SUBnote(const SUBnoteParameters &parameters, const SynthPars p);
         ~SUBnote();
 
         void legatonote(float freq, float velocity, int portamento_,
@@ -54,7 +55,7 @@ class SUBnote:public SynthNote
         void initparameters(float freq);
         void KillNote();
 
-        SUBnoteParameters *pars;
+        SUBnoteParameters &pars;
 
         //parameters
         int       stereo;
@@ -103,7 +104,7 @@ class SUBnote:public SynthNote
         float overtone_rolloff[MAX_SUB_HARMONICS];
         float overtone_freq[MAX_SUB_HARMONICS];
 
-        Controller *ctl;
+        const Controller *ctl;
         int   oldpitchwheel, oldbandwidth;
         float globalfiltercenterq;
 };
