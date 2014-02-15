@@ -48,9 +48,9 @@ class ADnote:public SynthNote
          * @param portamento_ 1 if the note has portamento
          * @param midinote_ The midi number of the note
          * @param besilent Start silent note if true*/
-        ADnote(ADnoteParameters *pars, Controller *ctl_, float freq,
-               float velocity, int portamento_, int midinote_,
-               bool besilent);
+        ADnote(const ADnoteParameters *pars, const SynthPars p)
+            :ADnote(*pars,p){}
+        ADnote(const ADnoteParameters &pars, const SynthPars &p);
         /**Destructor*/
         ~ADnote();
 
@@ -112,13 +112,12 @@ class ADnote:public SynthNote
 
 
         //GLOBALS
-        ADnoteParameters *partparams;
+        const ADnoteParameters &partparams;
         unsigned char     stereo; //if the note is stereo (allows note Panning)
         int   midinote;
         float velocity, basefreq;
 
         ONOFFTYPE   NoteEnabled;
-        Controller *ctl;
 
         /*****************************************************************/
         /*                    GLOBAL PARAMETERS                          */

@@ -40,7 +40,7 @@ struct SynthPars
 class SynthNote
 {
     public:
-        SynthNote(float freq, float vel, int port, int note, bool quiet);
+        SynthNote(const SynthPars &p);
         virtual ~SynthNote() {}
 
         /**Compute Output Samples
@@ -61,6 +61,8 @@ class SynthNote
         /* For polyphonic aftertouch needed */
         void setVelocity(float velocity_);
     protected:
+        const Controller &ctl;
+
         // Legato transitions
         class Legato
         {
