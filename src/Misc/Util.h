@@ -26,8 +26,12 @@
 #include <string>
 #include <sstream>
 #include <stdint.h>
+#include <algorithm>
 #include "Config.h"
 #include "../globals.h"
+
+using std::min;
+using std::max;
 
 //Velocity Sensing function
 extern float VelF(float velocity, unsigned char scaling);

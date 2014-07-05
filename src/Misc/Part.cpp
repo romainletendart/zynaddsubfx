@@ -28,10 +28,12 @@
 #include "../Params/ADnoteParameters.h"
 #include "../Params/SUBnoteParameters.h"
 #include "../Params/PADnoteParameters.h"
+#include "../Synth/SynthNote.h"
 #include "../Synth/ADnote.h"
 #include "../Synth/SUBnote.h"
 #include "../Synth/PADnote.h"
 #include "../DSP/FFTwrapper.h"
+#include "../Misc/Util.h"
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
@@ -185,7 +187,7 @@ Part::Part(Microtonal *microtonal_, FFTwrapper *fft_)
 
     defaults();
 }
-        
+
 void Part::cloneTraits(Part &p) const
 {
 #define CLONE(x) p.x = this->x
@@ -404,7 +406,7 @@ void Part::NoteOn(unsigned char note,
     }
 
     //compute the velocity sensing & offset for this note
-    const float vel = limit(VelF(velocity / 127.0f, Pvelsns) 
+    const float vel = limit(VelF(velocity / 127.0f, Pvelsns)
             + (Pveloffs - 64.0f) / 64.0f, 0.0f, 1.0f);
 
     //compute the keyshift
@@ -442,7 +444,7 @@ void Part::NoteOn(unsigned char note,
     if(doinglegato) {
         int ci = 0;
         for(int item = 0; item < NUM_KIT_ITEMS; ++item) {
-            if(kit[item].Pmuted || 
+            if(kit[item].Pmuted ||
                     note < kit[item].Pminkey ||
                     note > kit[item].Pmaxkey ||
                     lastnotecopy < kit[item].Pminkey ||
@@ -451,9 +453,9 @@ void Part::NoteOn(unsigned char note,
 
             //if this parameter is 127 for "unprocessed"
             partnote[pos].sendtoparteffect[ci] =
-                min(kit[item].Psendtoparteffect, NUM_PART_EFX);
+                min((int)kit[item].Psendtoparteffect, NUM_PART_EFX);
             partnote[posb].sendtoparteffect[ci] =
-                min(kit[item].Psendtoparteffect, NUM_PART_EFX);
+                min((int)kit[item].Psendtoparteffect, NUM_PART_EFX);
 
             auto zipItr = zipItrerator(partnote[pos],partnote[posb]);
             for(auto zip:zipItr) {
@@ -475,7 +477,7 @@ void Part::NoteOn(unsigned char note,
     if(legatomodevalid)
         partnote[posb].itemsplaying = 0;
 
-        
+
     SynthPars pars{ctl, notebasefreq, vel, portamento, note, false};
     initNote(partnote[pos], pars);
     if(legatomodevalid) {
@@ -499,7 +501,7 @@ void Part::initNote(PartNotes &p, const SynthPars &pars)
 
         //if this parameter is 127 for "unprocessed"
         p.kititem[ci].sendtoparteffect =
-            min(kit[item].Psendtoparteffect, NUM_PART_EFX);
+            min((int)kit[item].Psendtoparteffect, NUM_PART_EFX);
 
         if(kit[item].adpars && kit[item].Padenabled)
             p.add(new ADnote(kit[item].adpars, pars));

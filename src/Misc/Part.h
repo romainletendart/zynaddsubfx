@@ -93,7 +93,7 @@ class Part
 
         //the part's kit
         struct KitItem {
-            unsigned char     *Pname;
+            char              *Pname;
             unsigned char      Pminkey, Pmaxkey;
             bool               Penabled, Pmuted;
             bool               Padenabled, Psubenabled, Ppadenabled;
@@ -162,8 +162,7 @@ class Part
 
     private:
         struct PartNotes;
-        struct SynthPars;
-        void initNote(PartNotes &p, const SynthPars &pars);
+        void initNote(PartNotes &p, const struct SynthPars &pars);
         void RunNote(unsigned k);
         void KillNotePos(int pos);
         void RelaseNotePos(int pos);
