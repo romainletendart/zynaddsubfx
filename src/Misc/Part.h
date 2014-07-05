@@ -178,7 +178,10 @@ class Part
             int time;
             int begin() const;
             int end() const;
+            void add(SynthNote *);
         };
+
+        void addNote(SynthNote *note);
         //
         //note allocation table
         //status, note, begin(), end(), itemsplplaying, 

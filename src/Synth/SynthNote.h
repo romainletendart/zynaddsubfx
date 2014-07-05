@@ -60,6 +60,15 @@ class SynthNote
                                 bool externcall) = 0;
         /* For polyphonic aftertouch needed */
         void setVelocity(float velocity_);
+
+        /* TODO Update this field*/
+        char note;
+        enum NoteStatus {
+            KEY_OFF, KEY_PLAYING, KEY_RELASED_AND_SUSTAINED, KEY_RELASED
+        };
+        NoteStatus status;
+        char sendto;
+
     protected:
         const Controller &ctl;
 

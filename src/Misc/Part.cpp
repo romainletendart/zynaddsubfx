@@ -497,29 +497,29 @@ void Part::initNote(PartNotes &p, const SynthPars &pars)
                 pars.midinote > kit[item].Pmaxkey)
             continue;
 
-        int ci = partnote[pos].itemsplaying; //ci=current item
+        //int ci = partnote[pos].itemsplaying; //ci=current item
 
         //if this parameter is 127 for "unprocessed"
-        p.kititem[ci].sendtoparteffect =
-            min((int)kit[item].Psendtoparteffect, NUM_PART_EFX);
+        //p.kititem[ci].sendtoparteffect =
+        //    min((int)kit[item].Psendtoparteffect, NUM_PART_EFX);
 
         if(kit[item].adpars && kit[item].Padenabled)
-            p.add(new ADnote(kit[item].adpars, pars));
+            addNote(new ADnote(kit[item].adpars, pars));
 
         if(kit[item].subpars && kit[item].Psubenabled)
-            p.add(new SUBnote(kit[item].subpars,pars));
+            addNote(new SUBnote(kit[item].subpars,pars));
 
         if(kit[item].padpars && kit[item].Ppadenabled)
-            p.add(new PADnote(kit[item].padpars, pars);
+            addNote(new PADnote(kit[item].padpars, pars));
 
-        if(kit[item].adpars || kit[item].subpars || kit[item].padpars)
-            partnote[pos].itemsplaying++;
+        //if(kit[item].adpars || kit[item].subpars || kit[item].padpars)
+        //    partnote[pos].itemsplaying++;
     }
 }
 
-void applyKititem(PartNotes x)
-{
-}
+//void applyKititem(PartNotes x)
+//{
+//}
 
 /*
  * Note Off Messages
@@ -560,37 +560,16 @@ void Part::PolyphonicAftertouch(unsigned char note,
         monomem[note].velocity = velocity;       // Store this note's velocity.
 
 
-    for(int i = 0; i < POLIPHONY; ++i)
-        if((partnote[i].note == note) && (partnote[i].status == KEY_PLAYING)) {
+    for(int i = 0; i < POLIPHONY*NUM_KIT_ITEMS; ++i)
+        if(notes[i] && notes[i]->note == note && notes[i]->status == SynthNote::KEY_PLAYING) {
             /* update velocity */
             // compute the velocity offset
             float vel =
                 VelF(velocity / 127.0f, Pvelsns) + (Pveloffs - 64.0f) / 64.0f;
             vel = (vel < 0.0f) ? 0.0f : vel;
             vel = (vel > 1.0f) ? 1.0f : vel;
-
-            if(!Pkitmode) { // "normal mode"
-                if(kit[0].Padenabled && partnote[i].kititem[0].adnote)
-                    partnote[i].kititem[0].adnote->setVelocity(vel);
-                if(kit[0].Psubenabled && partnote[i].kititem[0].subnote)
-                    partnote[i].kititem[0].subnote->setVelocity(vel);
-                if(kit[0].Ppadenabled && partnote[i].kititem[0].padnote)
-                    partnote[i].kititem[0].padnote->setVelocity(vel);
-            }
-            else     // "kit mode"
-                for(int item = 0; item < NUM_KIT_ITEMS; ++item) {
-                    if(kit[item].Pmuted)
-                        continue;
-                    if((note < kit[item].Pminkey) || (note > kit[item].Pmaxkey))
-                        continue;
-
-                    if(kit[item].Padenabled && partnote[i].kititem[item].adnote)
-                        partnote[i].kititem[item].adnote->setVelocity(vel);
-                    if(kit[item].Psubenabled && partnote[i].kititem[item].subnote)
-                        partnote[i].kititem[item].subnote->setVelocity(vel);
-                    if(kit[item].Ppadenabled && partnote[i].kititem[item].padnote)
-                        partnote[i].kititem[item].padnote->setVelocity(vel);
-                }
+                
+            notes[i]->setVelocity(vel);
         }
 
 }
@@ -733,14 +712,7 @@ void Part::MonoMemRenote()
 void Part::RelaseNotePos(int pos)
 {
     for(int j = 0; j < NUM_KIT_ITEMS; ++j) {
-        if(partnote[pos].kititem[j].adnote)
-            partnote[pos].kititem[j].adnote->relasekey();
-
-        if(partnote[pos].kititem[j].subnote)
-            partnote[pos].kititem[j].subnote->relasekey();
-
-        if(partnote[pos].kititem[j].padnote)
-            partnote[pos].kititem[j].padnote->relasekey();
+        notes[j]->relasekey();
     }
     partnote[pos].status = KEY_RELASED;
 }
@@ -939,7 +911,7 @@ void Part::setkititemstatus(unsigned kititem, bool Penabled_)
     if((kititem == 0) || (kititem >= NUM_KIT_ITEMS))
         return;
 
-    Kit &kkit = kit[kititem];
+    KitItem &kkit = kit[kititem];
 
     //no need to update if
     if(kkit.Penabled == Penabled_)
@@ -963,6 +935,16 @@ void Part::setkititemstatus(unsigned kititem, bool Penabled_)
         //kkit.subpars = new SUBnoteParameters();
         //kkit.padpars = new PADnoteParameters(fft);
     }
+}
+
+void Part::addNote(SynthNote *note)
+{
+    int i=0;
+    while(notes[i] && i < POLIPHONY*NUM_KIT_ITEMS) i++;
+    if(i == POLIPHONY*NUM_KIT_ITEMS)
+        delete note;
+    else
+        notes[i] = note;
 }
 
 void Part::add2XMLinstrument(XMLwrapper *xml)
