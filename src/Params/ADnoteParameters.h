@@ -25,7 +25,6 @@
 
 
 #include "../globals.h"
-#include "../Misc/Util.h"
 #include "PresetsArray.h"
 
 class EnvelopeParams;

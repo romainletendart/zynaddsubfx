@@ -27,8 +27,11 @@
 #include "../globals.h"
 #include "SUBnote.h"
 #include "../Misc/Util.h"
+#include "../Params/Controller.h"
+#include "../Params/SUBnoteParameters.h"
+#include "../Params/FilterParams.h"
 
-SUBnote(const SUBnoteParameters &parameters, const SynthPars p)
+SUBnote::SUBnote(const SUBnoteParameters &parameters, const SynthPars p)
     :SynthNote(p), pars(parameters)
 {
     NoteEnabled = ON;
@@ -124,7 +127,7 @@ void SUBnote::setup(float freq,
     float reduceamp = 0.0f;
 
     for(int n = 0; n < numharmonics; ++n) {
-        float freq =  basefreq * pars->POvertoneFreqMult[pos[n]];
+        float freq =  basefreq * pars.POvertoneFreqMult[pos[n]];
         overtone_freq[n] = freq;
         overtone_rolloff[n] = computerolloff(freq);
 
@@ -402,7 +405,7 @@ float SUBnote::computerolloff(float freq)
  */
 void SUBnote::computecurrentparameters()
 {
-    if((FreqEnvelope != NULL) || (BandWidthEnvelope != NULL)
+    if(FreqEnvelope || BandWidthEnvelope 
        || (oldpitchwheel != ctl.pitchwheel.data)
        || (oldbandwidth != ctl.bandwidth.data)
        || (portamento != 0)) {

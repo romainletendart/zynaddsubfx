@@ -17,12 +17,6 @@ decl {\#include <FL/fl_draw.H>} {public local
 decl {\#include <FL/Fl_Box.H>} {public local
 } 
 
-decl {\#include "../globals.h"} {public local
-} 
-
-decl {\#include "../Misc/Util.h"} {public local
-} 
-
 decl {\#include "WidgetPDial.h"} {public local
 } 
 

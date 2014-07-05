@@ -31,6 +31,8 @@
 #include "../DSP/Filter.h"
 #include "OscilGen.h"
 #include "ADnote.h"
+#include "../Params/ADnoteParameters.h"
+#include "../Params/FilterParams.h"
 
 
 ADnote::ADnote(const ADnoteParameters &pars, const SynthPars &p)
@@ -292,7 +294,7 @@ ADnote::ADnote(const ADnoteParameters &pars, const SynthPars &p)
             oscposhi[nvoice][k] = oscposhi_start;
             //put random starting point for other subvoices
             oscposhi_start      =
-                (int)(RND * pars->VoicePar[nvoice].Unison_phase_randomness /
+                (int)(RND * pars.VoicePar[nvoice].Unison_phase_randomness /
                         127.0f * (synth->oscilsize - 1));
         }
 

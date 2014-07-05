@@ -23,19 +23,18 @@
 #ifndef PAD_NOTE_PARAMETERS_H
 #define PAD_NOTE_PARAMETERS_H
 
-#include "../Misc/XMLwrapper.h"
-#include "../DSP/FFTwrapper.h"
 #include "../globals.h"
-#include "../Synth/OscilGen.h"
-#include "../Synth/Resonance.h"
-#include "../Misc/Util.h"
 
-#include "EnvelopeParams.h"
-#include "LFOParams.h"
-#include "FilterParams.h"
 #include "Presets.h"
 #include <string>
 #include <functional>
+
+class FFTwrapper;
+class OscilGen;
+class Resonance;
+class EnvelopeParams;
+class LFOParams;
+class FilterParams;
 
 /**
  * Parameters for PAD synthesis

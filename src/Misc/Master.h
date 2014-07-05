@@ -23,7 +23,6 @@
 
 #ifndef MASTER_H
 #define MASTER_H
-#include <pthread.h>
 
 #include "../globals.h"
 #include "Microtonal.h"
@@ -32,7 +31,6 @@
 #include "Bank.h"
 #include "Recorder.h"
 #include "Dump.h"
-#include "XMLwrapper.h"
 
 #include "../Params/Controller.h"
 

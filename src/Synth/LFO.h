@@ -24,7 +24,7 @@
 #define LFO_H
 
 #include "../globals.h"
-#include "../Params/LFOParams.h"
+class LFOParams;
 
 /**Class for creating Low Frequency Ocillators*/
 class LFO
@@ -35,7 +35,7 @@ class LFO
          * @param lfopars pointer to a LFOParams object
          * @param basefreq base frequency of LFO
          */
-        LFO(LFOParams *lfopars, float basefreq);
+        LFO(const LFOParams &lfopars, float basefreq);
         /**Deconstructor*/
         ~LFO();
         float lfoout();

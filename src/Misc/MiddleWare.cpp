@@ -19,6 +19,8 @@
 #include "Part.h"
 #include "../Params/ADnoteParameters.h"
 #include "../Params/PADnoteParameters.h"
+#include "../Synth/OscilGen.h"
+#include "../DSP/FFTwrapper.h"
 #include "../Effects/EffectMgr.h"
 
 #include <string>

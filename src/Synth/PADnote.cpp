@@ -22,6 +22,10 @@
 #include "PADnote.h"
 #include "../Misc/Config.h"
 #include "../DSP/Filter.h"
+#include "../Params/PADnoteParameters.h"
+#include "../Params/Controller.h"
+#include "../Params/FilterParams.h"
+#include "../Misc/Util.h"
 
 PADnote::PADnote(const PADnoteParameters &parameters, const SynthPars p)
     :SynthNote(p), pars(parameters)
@@ -124,29 +128,29 @@ void PADnote::setup(float freq,
         else
             NoteGlobalPar.Punch.Enabled = 0;
 
-        NoteGlobalPar.FreqEnvelope = Envelope(pars.FreqEnvelope, basefreq);
-        NoteGlobalPar.FreqLfo      = LFO(pars.FreqLfo, basefreq);
+        NoteGlobalPar.FreqEnvelope = new Envelope(*pars.FreqEnvelope, basefreq);
+        NoteGlobalPar.FreqLfo      = new LFO(*pars.FreqLfo, basefreq);
 
-        NoteGlobalPar.AmpEnvelope = Envelope(pars.AmpEnvelope, basefreq);
-        NoteGlobalPar.AmpLfo      = LFO(pars.AmpLfo, basefreq);
+        NoteGlobalPar.AmpEnvelope = new Envelope(*pars.AmpEnvelope, basefreq);
+        NoteGlobalPar.AmpLfo      = new LFO(*pars.AmpLfo, basefreq);
     }
 
     NoteGlobalPar.Volume = 4.0f
                            * powf(0.1f, 3.0f * (1.0f - pars.PVolume / 96.0f))      //-60 dB .. 0 dB
                            * VelF(velocity, pars.PAmpVelocityScaleFunction); //velocity sensing
 
-    NoteGlobalPar.AmpEnvelope.envout_dB(); //discard the first envelope output
+    NoteGlobalPar.AmpEnvelope->envout_dB(); //discard the first envelope output
     globaloldamplitude = globalnewamplitude = NoteGlobalPar.Volume
-                                              * NoteGlobalPar.AmpEnvelope.envout_dB()
-                                              * NoteGlobalPar.AmpLfo.amplfoout();
+                                              * NoteGlobalPar.AmpEnvelope->envout_dB()
+                                              * NoteGlobalPar.AmpLfo->amplfoout();
 
     if(!legato) {
         NoteGlobalPar.GlobalFilterL = Filter::generate(pars.GlobalFilter);
         NoteGlobalPar.GlobalFilterR = Filter::generate(pars.GlobalFilter);
 
-        NoteGlobalPar.FilterEnvelope = new Envelope(pars.FilterEnvelope,
+        NoteGlobalPar.FilterEnvelope = new Envelope(*pars.FilterEnvelope,
                                                     basefreq);
-        NoteGlobalPar.FilterLfo = new LFO(pars.FilterLfo, basefreq);
+        NoteGlobalPar.FilterLfo = new LFO(*pars.FilterLfo, basefreq);
     }
     NoteGlobalPar.FilterQ = pars.GlobalFilter->getq();
     NoteGlobalPar.FilterFreqTracking = pars.GlobalFilter->getfreqtracking(
@@ -206,13 +210,13 @@ inline void PADnote::fadein(float *smps)
 void PADnote::computecurrentparameters()
 {
     float globalpitch, globalfilterpitch;
-    globalpitch = 0.01f * (NoteGlobalPar.FreqEnvelope.envout()
-                           + NoteGlobalPar.FreqLfo.lfoout()
+    globalpitch = 0.01f * (NoteGlobalPar.FreqEnvelope->envout()
+                           + NoteGlobalPar.FreqLfo->lfoout()
                            * ctl.modwheel.relmod + NoteGlobalPar.Detune);
     globaloldamplitude = globalnewamplitude;
     globalnewamplitude = NoteGlobalPar.Volume
-                         * NoteGlobalPar.AmpEnvelope.envout_dB()
-                         * NoteGlobalPar.AmpLfo.amplfoout();
+                         * NoteGlobalPar.AmpEnvelope->envout_dB()
+                         * NoteGlobalPar.AmpLfo->amplfoout();
 
     globalfilterpitch = NoteGlobalPar.FilterEnvelope->envout()
                         + NoteGlobalPar.FilterLfo->lfoout()
@@ -390,7 +394,7 @@ int PADnote::noteout(float *outl, float *outr)
 
     // Check if the global amplitude is finished.
     // If it does, disable the note
-    if(NoteGlobalPar.AmpEnvelope.finished()) {
+    if(NoteGlobalPar.AmpEnvelope->finished()) {
         for(int i = 0; i < synth->buffersize; ++i) { //fade-out
             float tmp = 1.0f - (float)i / synth->buffersize_f;
             outl[i] *= tmp;
@@ -409,7 +413,7 @@ int PADnote::finished() const
 
 void PADnote::relasekey()
 {
-    NoteGlobalPar.FreqEnvelope.relasekey();
-    NoteGlobalPar.FilterEnvelope.relasekey();
-    NoteGlobalPar.AmpEnvelope.relasekey();
+    NoteGlobalPar.FreqEnvelope->relasekey();
+    NoteGlobalPar.FilterEnvelope->relasekey();
+    NoteGlobalPar.AmpEnvelope->relasekey();
 }

@@ -24,23 +24,22 @@
 #include "Envelope.h"
 #include "../Params/EnvelopeParams.h"
 
-Envelope::Envelope(EnvelopeParams *envpars, float basefreq)
+Envelope::Envelope(EnvelopeParams &envpars, float basefreq)
 {
-    int i;
-    envpoints = envpars->Penvpoints;
+    envpoints = envpars.Penvpoints;
     if(envpoints > MAX_ENVELOPE_POINTS)
         envpoints = MAX_ENVELOPE_POINTS;
-    envsustain     = (envpars->Penvsustain == 0) ? -1 : envpars->Penvsustain;
-    forcedrelase   = envpars->Pforcedrelease;
-    envstretch     = powf(440.0f / basefreq, envpars->Penvstretch / 64.0f);
-    linearenvelope = envpars->Plinearenvelope;
+    envsustain     = (envpars.Penvsustain == 0) ? -1 : envpars.Penvsustain;
+    forcedrelase   = envpars.Pforcedrelease;
+    envstretch     = powf(440.0f / basefreq, envpars.Penvstretch / 64.0f);
+    linearenvelope = envpars.Plinearenvelope;
 
-    if(envpars->Pfreemode == 0)
-        envpars->converttofree();
+    if(envpars.Pfreemode == 0)
+        envpars.converttofree();
 
     float bufferdt = synth->buffersize_f / synth->samplerate_f;
 
-    int mode = envpars->Envmode;
+    int mode = envpars.Envmode;
 
     //for amplitude envelopes
     if((mode == 1) && (linearenvelope == 0))
@@ -48,8 +47,8 @@ Envelope::Envelope(EnvelopeParams *envpars, float basefreq)
     if((mode == 2) && (linearenvelope != 0))
         mode = 1;                              //change to linear
 
-    for(i = 0; i < MAX_ENVELOPE_POINTS; ++i) {
-        float tmp = envpars->getdt(i) / 1000.0f * envstretch;
+    for(int i = 0; i < MAX_ENVELOPE_POINTS; ++i) {
+        float tmp = envpars.getdt(i) / 1000.0f * envstretch;
         if(tmp > bufferdt)
             envdt[i] = bufferdt / tmp;
         else
@@ -57,24 +56,24 @@ Envelope::Envelope(EnvelopeParams *envpars, float basefreq)
 
         switch(mode) {
             case 2:
-                envval[i] = (1.0f - envpars->Penvval[i] / 127.0f) * -40;
+                envval[i] = (1.0f - envpars.Penvval[i] / 127.0f) * -40;
                 break;
             case 3:
                 envval[i] =
                     (powf(2, 6.0f
-                          * fabs(envpars->Penvval[i]
+                          * fabs(envpars.Penvval[i]
                                  - 64.0f) / 64.0f) - 1.0f) * 100.0f;
-                if(envpars->Penvval[i] < 64)
+                if(envpars.Penvval[i] < 64)
                     envval[i] = -envval[i];
                 break;
             case 4:
-                envval[i] = (envpars->Penvval[i] - 64.0f) / 64.0f * 6.0f; //6 octaves (filtru)
+                envval[i] = (envpars.Penvval[i] - 64.0f) / 64.0f * 6.0f; //6 octaves (filtru)
                 break;
             case 5:
-                envval[i] = (envpars->Penvval[i] - 64.0f) / 64.0f * 10;
+                envval[i] = (envpars.Penvval[i] - 64.0f) / 64.0f * 10;
                 break;
             default:
-                envval[i] = envpars->Penvval[i] / 127.0f;
+                envval[i] = envpars.Penvval[i] / 127.0f;
         }
     }
 

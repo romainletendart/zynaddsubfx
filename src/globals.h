@@ -24,12 +24,30 @@
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
-#include <stdint.h>
 
 //Forward declarations
 namespace rtosc{struct Ports; class ThreadLink;};
 extern rtosc::ThreadLink *bToU;
 extern rtosc::ThreadLink *uToB;
+
+class EffectMgr;
+class ADnoteParameters;
+class ADnoteGlobalParam;
+class SUBnoteParameters;
+class PADnoteParameters;
+class SynthNote;
+
+class Microtonal;
+class XMLwrapper;
+class FFTwrapper;
+class LFOparams;
+class FilterParams;
+class LFO;
+class Envelope;
+
+class Controller;
+class Master;
+class Part;
 
 /**
  * The number of harmonics of additive synth

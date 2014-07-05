@@ -24,11 +24,11 @@
 #define SUB_NOTE_H
 
 #include "SynthNote.h"
-#include "../globals.h"
-#include "../Params/SUBnoteParameters.h"
-#include "../Params/Controller.h"
 #include "Envelope.h"
+#include "../globals.h"
 #include "../DSP/Filter.h"
+class Controller;
+class SUBnoteParameters;
 
 class SUBnote:public SynthNote
 {
@@ -55,7 +55,7 @@ class SUBnote:public SynthNote
         void initparameters(float freq);
         void KillNote();
 
-        SUBnoteParameters &pars;
+        const SUBnoteParameters &pars;
 
         //parameters
         int       stereo;
@@ -104,7 +104,6 @@ class SUBnote:public SynthNote
         float overtone_rolloff[MAX_SUB_HARMONICS];
         float overtone_freq[MAX_SUB_HARMONICS];
 
-        const Controller *ctl;
         int   oldpitchwheel, oldbandwidth;
         float globalfiltercenterq;
 };

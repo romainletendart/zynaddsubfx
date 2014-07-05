@@ -24,11 +24,12 @@
 #define SUB_NOTE_PARAMETERS_H
 
 #include "../globals.h"
-#include "../Misc/XMLwrapper.h"
-#include "FilterParams.h"
 #include "Presets.h"
 
 class EnvelopeParams;
+class FilterParams;
+class XMLwrapper;
+
 class SUBnoteParameters:public Presets
 {
     public:

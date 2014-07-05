@@ -22,11 +22,10 @@
 #ifndef SYNTH_NOTE_H
 #define SYNTH_NOTE_H
 #include "../globals.h"
-#include "../Params/FilterParams.h"
 
 struct SynthPars
 {
-    class Controller &ctl;
+    Controller &ctl;
     float freq;
     float velocity;
     int portamento;

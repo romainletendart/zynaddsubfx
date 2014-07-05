@@ -24,10 +24,17 @@
 #define OSCIL_GEN_H
 
 #include "../globals.h"
-#include "../Misc/XMLwrapper.h"
-#include "../DSP/FFTwrapper.h"
 #include "../Params/Presets.h"
-#include "Resonance.h"
+
+class XMLwrapper;
+class Resonance;
+class FFTwrapper;
+namespace std{
+    template<class T>
+    class complex;
+}
+typedef double fftw_real;
+typedef std::complex<fftw_real> fft_t;
 
 class OscilGen:public Presets
 {

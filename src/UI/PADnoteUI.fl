@@ -2,17 +2,6 @@
 version 1.0302 
 header_name {.h} 
 code_name {.cc}
-decl {\#include "../Params/PADnoteParameters.h"} {public local
-} 
-
-decl {\#include "../Misc/Util.h"} {public local
-} 
-
-decl {\#include "../Misc/Master.h"} {public local
-} 
-
-decl {\#include "../Misc/MiddleWare.h"} {public local
-} 
 
 decl {\#include "ResonanceUI.h"} {public local
 } 

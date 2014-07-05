@@ -22,11 +22,10 @@
 #define PAD_NOTE_H
 
 #include "SynthNote.h"
-#include "../globals.h"
-#include "../Params/PADnoteParameters.h"
-#include "../Params/Controller.h"
 #include "Envelope.h"
 #include "LFO.h"
+
+class PADnoteParameters;
 
 /**The "pad" synthesizer*/
 class PADnote:public SynthNote
@@ -75,8 +74,8 @@ class PADnote:public SynthNote
             ******************************************/
             float Detune;  //cents
 
-            Envelope FreqEnvelope;
-            LFO      FreqLfo;
+            Envelope *FreqEnvelope;
+            LFO      *FreqLfo;
 
             /********************************************
              *     AMPLITUDE GLOBAL PARAMETERS          *
@@ -85,8 +84,8 @@ class PADnote:public SynthNote
 
             float Panning;  // [ 0 .. 1 ]
 
-            Envelope AmpEnvelope;
-            LFO      AmpLfo;
+            Envelope *AmpEnvelope;
+            LFO      *AmpLfo;
 
             struct {
                 int   Enabled;
@@ -102,9 +101,9 @@ class PADnote:public SynthNote
             float FilterQ;
             float FilterFreqTracking;
 
-            Envelope FilterEnvelope;
+            Envelope *FilterEnvelope;
 
-            LFO FilterLfo;
+            LFO *FilterLfo;
         } NoteGlobalPar;
 
 
